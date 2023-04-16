@@ -3,9 +3,11 @@ document.addEventListener("DOMContentLoaded", () => {
   addingEventListeners()
 });
 
+let taskObjArr = []
 // get the form and add an event listener to the form
 function addingEventListeners() {
   document.getElementById("create-task-form").addEventListener("submit", handleFormSubmit)
+  document.getElementById("sort-tasks").addEventListener("change", sortTasks)
 }
 
 function handleFormSubmit(e){
@@ -13,24 +15,34 @@ function handleFormSubmit(e){
   const task = e.target[0].value
   const priorityLevel = parseInt(e.target.priority.value)
 
-  displayTask(task, priorityLevel)
+  const taskObj = {task, priorityLevel}
+  taskObjArr.push(taskObj)
+  console.log(taskObjArr)
+
+  sortTasks()
+  displayTasks()
 }
 
-function displayTask(task, priorityLevel){
+function displayTasks(){
   const taskHoldUl = document.getElementById("tasks")
-  const taskHoldLi = document.createElement("li")
-  const deleteBtn = document.createElement("button")
+  taskHoldUl.innerHTML = ""
 
-  deleteBtn.textContent = "X"
-  deleteBtn.addEventListener("click", deleteTask)
+  taskObjArr.forEach((task) => {
+    const taskHoldLi = document.createElement("li")
+    const deleteBtn = document.createElement("button")
 
-  taskHoldLi.textContent = task + " "
-  taskHoldLi.style.color = getPriorityColor(priorityLevel)
-  taskHoldLi.appendChild(deleteBtn)
-  taskHoldUl.appendChild(taskHoldLi)
+    deleteBtn.textContent = "X"
+    deleteBtn.addEventListener("click", (e) => deleteTask(e, task))
+
+    taskHoldLi.textContent = task.task + " "
+    taskHoldLi.style.color = getPriorityColor(task.priorityLevel)
+    taskHoldLi.appendChild(deleteBtn)
+    taskHoldUl.appendChild(taskHoldLi)
+  })
 }
 
-function deleteTask(e){
+function deleteTask(e, task){
+  taskObjArr = taskObjArr.filter((element) => element.task !== task.task)
   e.target.parentNode.remove()
 }
 
@@ -42,4 +54,14 @@ function getPriorityColor(priorityLevel){
   } else {
     return "purple"
   }
+}
+
+function sortTasks(){
+  const sortTasksSelect = document.getElementById("sort-tasks")
+  if (sortTasksSelect.value === "high-low"){
+    taskObjArr.sort((a, b) => a.priorityLevel - b.priorityLevel)
+  } else {
+    taskObjArr.sort((a, b) => b.priorityLevel - a.priorityLevel)
+  }
+  displayTasks()
 }
