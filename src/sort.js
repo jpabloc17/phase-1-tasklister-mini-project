@@ -2,12 +2,13 @@ document.addEventListener("DOMContentLoaded", () => {
   // your code here
   addingEventListeners()
 });
-
+const form = document.querySelector("form")
 let taskObjArr = []
 // get the form and add an event listener to the form
 function addingEventListeners() {
   document.getElementById("create-task-form").addEventListener("submit", handleFormSubmit)
   document.getElementById("sort-tasks").addEventListener("change", sortTasks)
+  
 }
 
 function handleFormSubmit(e){
@@ -21,6 +22,7 @@ function handleFormSubmit(e){
 
   sortTasks()
   displayTasks()
+  form.reset()
 }
 
 function displayTasks(){

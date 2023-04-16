@@ -11,4 +11,4 @@ stage 3
 [x] change the color of task according to the priority level 
 
 stage 4
-[] allow the user to sort the priorities in both directions
+[x] allow the user to sort the priorities in both directions
